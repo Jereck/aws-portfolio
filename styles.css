@@ -168,6 +168,10 @@ h2 {
   color: #666;
 }
 
+.exp-list {
+  list-style-position: inside;
+}
+
 footer {
   text-align: center;
   padding: 20px 0;
