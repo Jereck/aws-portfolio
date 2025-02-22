@@ -34,11 +34,12 @@ function fetchVisitorCount() {
   var requestOptions = {
     method: 'GET',
     headers: {
+      "Access-Control-Allow-Headers" : "Content-Type",
       'Access-Control-Allow-Origin': '*',
       "Access-Control-Allow-Credentials": true,
     }
   }
-  fetch("https://2p6490wb85.execute-api.us-east-1.amazonaws.com/Dev", requestOptions)
+  fetch("https://fg3foz4liqzdl4kl46jluesp440kwggh.lambda-url.us-east-1.on.aws/", requestOptions)
     .then((response) => response.json())
     .then((data) => {
       const visitorCount = data
