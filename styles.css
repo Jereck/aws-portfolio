@@ -126,6 +126,7 @@ h2 {
 
 .btn:hover {
   background-color: darken(var(--primary-color), 10%);
+  color: black;
 }
 
 .timeline {
@@ -274,6 +275,12 @@ footer {
 .cert-list li {
   background-color: var(--primary-color);
   color: #fff;
+}
+
+.technologies {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {
