@@ -31,7 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function fetchVisitorCount() {
-  fetch("https://xl395jt7n3.execute-api.us-east-1.amazonaws.com/Dev")
+  var requestOptions = {
+    method: 'GET',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      "Access-Control-Allow-Credentials": true,
+    }
+  }
+  fetch("https://2p6490wb85.execute-api.us-east-1.amazonaws.com/Dev", requestOptions)
     .then((response) => response.json())
     .then((data) => {
       const visitorCount = data
