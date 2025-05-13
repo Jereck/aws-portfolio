@@ -21,6 +21,7 @@ This is my personal portfolio website, showcasing my projects, experience, and s
 - **AWS CloudFront** (CDN for fast delivery)  
 - **AWS Route 53** (Domain management)  
 - **AWS Lambda** (Serverless visitor counter)  
+- **API Gateway** (Communication with the database)
 - **DynamoDB** (Database for visitor count)
 - **AWS CodePipeline** (CI/CD integration)  
 
