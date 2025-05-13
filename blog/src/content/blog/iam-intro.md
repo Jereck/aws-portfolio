@@ -4,6 +4,7 @@ description: "A beginner-friendly look at AWS Identity and Access Management (IA
 pubDate: 2025-05-13
 author: "Jake Reck"
 tags: ["AWS", "IAM", "Security", "DevOps"]
+heroImage: '/blog-placeholder-4.jpg'
 ---
 
 When you're getting started with AWS, it's easy to overlook IAM. But trust me — **it's one of the most important services you need to understand** if you're going to work in cloud or DevOps roles.
@@ -58,3 +59,33 @@ Go to **IAM > Policies > Create policy**, and use this JSON:
     }
   ]
 }
+```
+
+### Step 2: Attach the Policy to a User
+1. Create a new IAM user
+
+2. Attach the policy you just made
+
+3. Download the access key/secret (for local dev or GitHub Actions)
+
+#### 🔄 IAM in DevOps Workflows
+In a CI/CD setup (like GitHub Actions), you'd use a role + OpenID Connect instead of an IAM user with static credentials. This:
+
+- Improves security
+
+- Enables fine-grained, short-lived access
+
+- Makes your pipelines cloud-native and safe
+
+#### 📌 Takeaways
+- Never treat IAM as an afterthought — it's foundational.
+
+- Use least privilege: only grant access that’s absolutely necessary.
+
+- Rotate secrets. Or better yet, use roles with temporary credentials.
+
+- Automate IAM setup with Terraform or CloudFormation once you’re ready.
+
+IAM is what separates good infrastructure from secure, scalable infrastructure.
+
+You’re not just building systems — you’re protecting them.
