@@ -3,17 +3,398 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+
+// Get recent blog posts (adjust the number as needed)
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+).slice(0, 3);
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			/* Hero Section */
+			.hero {
+				background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(245, 166, 35, 0.1) 100%);
+				padding: 5rem 0;
+				text-align: center;
+				border-radius: 8px;
+				margin-bottom: 3rem;
+			}
+
+			.hero h1 {
+				font-size: 3rem;
+				margin-bottom: 1rem;
+				background: linear-gradient(to right, #4a90e2, #f5a623);
+				-webkit-background-clip: text;
+				background-clip: text;
+				color: transparent;
+				display: inline-block;
+			}
+
+			.hero p {
+				font-size: 1.25rem;
+				max-width: 700px;
+				margin: 0 auto 2rem;
+				color: #666;
+			}
+
+			.hero-cta {
+				display: inline-block;
+				background-color: #4a90e2;
+				color: white;
+				padding: 0.75rem 1.5rem;
+				border-radius: 8px;
+				text-decoration: none;
+				font-weight: 500;
+				transition: all 0.3s ease;
+			}
+
+			.hero-cta:hover {
+				background-color: #3a7bc8;
+				transform: translateY(-2px);
+			}
+
+			/* AWS Icons */
+			.aws-icons {
+				display: flex;
+				justify-content: center;
+				gap: 2rem;
+				margin: 2rem 0;
+				flex-wrap: wrap;
+			}
+
+			.aws-icon {
+				width: 60px;
+				height: 60px;
+				opacity: 0.7;
+				transition: all 0.3s ease;
+			}
+
+			.aws-icon:hover {
+				opacity: 1;
+				transform: scale(1.1);
+			}
+
+			/* About Section */
+			.about-section {
+				background-color: white;
+				border-radius: 8px;
+				padding: 3rem;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+				margin-bottom: 3rem;
+			}
+
+			.about-section h2 {
+				font-size: 2rem;
+				margin-bottom: 1rem;
+				color: #333;
+				position: relative;
+				display: inline-block;
+			}
+
+			.about-section h2::after {
+				content: "";
+				position: absolute;
+				bottom: -10px;
+				left: 0;
+				width: 80px;
+				height: 4px;
+				background: linear-gradient(to right, #4a90e2, #f5a623);
+				border-radius: 2px;
+			}
+
+			.about-content {
+				display: flex;
+				gap: 2rem;
+				align-items: center;
+				margin-top: 2rem;
+			}
+
+			.about-text {
+				flex: 2;
+			}
+
+			.about-image {
+				flex: 1;
+				text-align: center;
+			}
+
+			.about-image img {
+				max-width: 100%;
+				border-radius: 8px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			}
+
+			/* Recent Posts */
+			.recent-posts {
+				margin-bottom: 3rem;
+			}
+
+			.recent-posts h2 {
+				font-size: 2rem;
+				margin-bottom: 2rem;
+				color: #333;
+				position: relative;
+				display: inline-block;
+			}
+
+			.recent-posts h2::after {
+				content: "";
+				position: absolute;
+				bottom: -10px;
+				left: 0;
+				width: 80px;
+				height: 4px;
+				background: linear-gradient(to right, #4a90e2, #f5a623);
+				border-radius: 2px;
+			}
+
+			.posts-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+				gap: 2rem;
+			}
+
+			.post-card {
+				background-color: white;
+				border-radius: 8px;
+				overflow: hidden;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+				transition: all 0.3s ease;
+				border: 1px solid #e0e0e0;
+			}
+
+			.post-card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+				border-color: #4a90e2;
+			}
+
+			.post-content {
+				padding: 1.5rem;
+			}
+
+			.post-date {
+				font-size: 0.875rem;
+				color: #999;
+				margin-bottom: 0.5rem;
+			}
+
+			.post-title {
+				font-size: 1.25rem;
+				margin-bottom: 0.5rem;
+				color: #333;
+			}
+
+			.post-excerpt {
+				color: #666;
+				margin-bottom: 1rem;
+			}
+
+			.read-more {
+				display: inline-block;
+				color: #4a90e2;
+				font-weight: 500;
+				text-decoration: none;
+				transition: all 0.3s ease;
+			}
+
+			.read-more:hover {
+				color: #3a7bc8;
+			}
+
+			/* Topics Section */
+			.topics-section {
+				background-color: white;
+				border-radius: 8px;
+				padding: 3rem;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+				margin-bottom: 3rem;
+			}
+
+			.topics-section h2 {
+				font-size: 2rem;
+				margin-bottom: 2rem;
+				color: #333;
+				position: relative;
+				display: inline-block;
+			}
+
+			.topics-section h2::after {
+				content: "";
+				position: absolute;
+				bottom: -10px;
+				left: 0;
+				width: 80px;
+				height: 4px;
+				background: linear-gradient(to right, #4a90e2, #f5a623);
+				border-radius: 2px;
+			}
+
+			.topics-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+				gap: 1.5rem;
+			}
+
+			.topic-card {
+				background-color: rgba(74, 144, 226, 0.1);
+				border-radius: 8px;
+				padding: 1.5rem;
+				text-align: center;
+				transition: all 0.3s ease;
+			}
+
+			.topic-card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+				background-color: #4a90e2;
+				color: white;
+			}
+
+			.topic-icon {
+				font-size: 2rem;
+				margin-bottom: 1rem;
+				color: #4a90e2;
+			}
+
+			.topic-card:hover .topic-icon {
+				color: white;
+			}
+
+			.topic-title {
+				font-weight: 500;
+			}
+
+			/* Newsletter */
+			.newsletter {
+				background: linear-gradient(135deg, #4a90e2 0%, #3a7bc8 100%);
+				border-radius: 8px;
+				padding: 3rem;
+				color: white;
+				text-align: center;
+				margin-bottom: 3rem;
+			}
+
+			.newsletter h2 {
+				font-size: 2rem;
+				margin-bottom: 1rem;
+			}
+
+			.newsletter p {
+				max-width: 600px;
+				margin: 0 auto 2rem;
+				opacity: 0.9;
+			}
+
+			.newsletter-form {
+				display: flex;
+				max-width: 500px;
+				margin: 0 auto;
+			}
+
+			.newsletter-input {
+				flex: 1;
+				padding: 0.75rem 1rem;
+				border: none;
+				border-radius: 8px 0 0 8px;
+				font-size: 1rem;
+			}
+
+			.newsletter-button {
+				background-color: #f5a623;
+				color: white;
+				border: none;
+				padding: 0 1.5rem;
+				border-radius: 0 8px 8px 0;
+				font-weight: 500;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.newsletter-button:hover {
+				background-color: #e09612;
+			}
+
+			/* Responsive */
+			@media (max-width: 768px) {
+				.hero h1 {
+					font-size: 2.5rem;
+				}
+
+				.about-content {
+					flex-direction: column;
+				}
+
+				.about-image {
+					order: -1;
+					margin-bottom: 2rem;
+				}
+
+				.newsletter-form {
+					flex-direction: column;
+				}
+
+				.newsletter-input {
+					border-radius: 8px;
+					margin-bottom: 1rem;
+				}
+
+				.newsletter-button {
+					border-radius: 8px;
+					padding: 0.75rem 1.5rem;
+				}
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, from Jake Reck's Blog!</h1>
+			<section class="hero">
+				<div class="container">
+					<h1>AWS DevOps Journey</h1>
+					<p>
+						Welcome to my blog where I share insights, tutorials, and experiences from my journey in AWS cloud infrastructure and DevOps practices.
+					</p>
+					<a href="/blog" class="hero-cta">Explore Articles</a>
+
+				</div>
+			</section>
+
+			<div class="container">
+				<section class="about-section">
+					<h2>About This Blog</h2>
+					<div class="about-content">
+						<div class="about-text">
+							<p>
+								As a Software Engineer with a passion for cloud infrastructure and DevOps practices, I created this blog to document my learning journey and share valuable insights with the community.
+							</p>
+							<p>
+								Here you'll find practical tutorials, best practices, and real-world experiences working with AWS services, infrastructure as code, CI/CD pipelines, and modern development workflows.
+							</p>
+							<p>
+								Whether you're just starting with AWS or looking to level up your DevOps skills, I hope the content here helps you on your own journey.
+							</p>
+						</div>
+						<div class="about-image">
+							<img src="/devops-cycle.jpg" alt="DevOps Cycle" />
+						</div>
+					</div>
+				</section>
+
+				<section class="newsletter">
+					<h2>Stay Updated</h2>
+					<p>Subscribe to my newsletter to receive the latest articles, tutorials, and insights about AWS and DevOps directly in your inbox.</p>
+					<form class="newsletter-form">
+						<input type="email" placeholder="Your email address" class="newsletter-input" required />
+						<button type="submit" class="newsletter-button">Subscribe</button>
+					</form>
+				</section>
+			</div>
 		</main>
 		<Footer />
 	</body>
