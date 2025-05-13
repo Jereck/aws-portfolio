@@ -7,79 +7,195 @@ import FormattedDate from '../components/FormattedDate.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.props;
+
+
 ---
 
 <html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+  <head>
+    <BaseHead title={title} description={description} />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  </head>
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
+  <body class="bg-gray-50 text-gray-800 font-sans">
+    <Header />
+    
+    
+    <main class="pb-16">
+      <article>
+        <!-- Hero Section -->
+        <div class="relative">
+          <!-- Hero Image -->
+          <div class="w-full h-[40vh] sm:h-[25vh] md:h-[30vh] relative">
+            {heroImage ? (
+              <img 
+                src={heroImage || "/placeholder.svg"} 
+                alt={title} 
+                class="w-full h-full object-cover"
+              />
+            ) : (
+              <div class="w-full h-full bg-gradient-to-r from-blue-600 to-indigo-800"></div>
+            )}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10"></div>
+          </div>
+          
+          <!-- Title Overlay -->
+          <div class="absolute bottom-0 left-0 right-0 px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 text-white max-w-5xl mx-auto">
+            <div class="animate__animated animate__fadeInUp">
+              <!-- Tags -->
+              <div class="flex flex-wrap gap-2 mb-4">
+                {tags?.map(tag => (
+                  <a href={`/blog/tag/${tag.toLowerCase()}`} class="bg-blue-600/80 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full hover:bg-blue-700 transition-colors">
+                    {tag}
+                  </a>
+                ))}
+              </div>
+              
+              <!-- Title -->
+              <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                {title}
+              </h1>
+              
+              <!-- Meta Info -->
+              <div class="flex flex-wrap items-center text-sm text-blue-100 gap-y-2">
+                <span>
+                  <FormattedDate date={pubDate} />
+                </span>
+                {updatedDate && (
+                  <>
+                    <span class="mx-2">•</span>
+                    <span class="italic">
+                      Updated: <FormattedDate date={updatedDate} />
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Content Container -->
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">          
+          <!-- Article Content -->
+          <div class="prose prose-lg max-w-none py-10">
+            <slot />
+          </div>
+          
+          <!-- Tags -->
+          <div class="py-8 border-t border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Tags</h3>
+            <div class="flex flex-wrap gap-2">
+              {tags?.map(tag => (
+                <a href={`/blog/tag/${tag.toLowerCase()}`} class="bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium px-3 py-1 rounded-md transition-colors">
+                  {tag}
+                </a>
+              ))}
+            </div>
+          </div>
+          
+        </div>
+
+      </article>
+    </main>
+    
+    <Footer />
+    
+    <style is:global>
+      /* Prose styling for the article content */
+      .prose {
+        color: #374151;
+        max-width: 65ch;
+        margin: 0 auto;
+      }
+      
+      .prose h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #1f2937;
+      }
+      
+      .prose h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: #1f2937;
+      }
+      
+      .prose p {
+        margin-top: 1.25rem;
+        margin-bottom: 1.25rem;
+        line-height: 1.75;
+      }
+      
+      .prose a {
+        color: #2563eb;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      
+      .prose a:hover {
+        color: #1d4ed8;
+      }
+      
+      .prose ul, .prose ol {
+        margin-top: 1.25rem;
+        margin-bottom: 1.25rem;
+        padding-left: 1.625rem;
+      }
+      
+      .prose li {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .prose blockquote {
+        font-style: italic;
+        border-left: 4px solid #e5e7eb;
+        padding-left: 1rem;
+        margin-left: 0;
+        margin-right: 0;
+        color: #4b5563;
+      }
+      
+      .prose img {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+      
+      .prose code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 0.875em;
+        color: #1f2937;
+        background-color: #f3f4f6;
+        padding: 0.2em 0.4em;
+        border-radius: 0.25rem;
+      }
+      
+      .prose pre {
+        background-color: #1f2937;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        overflow-x: auto;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .prose pre code {
+        color: #e5e7eb;
+        background-color: transparent;
+        padding: 0;
+      }
+      
+      /* Reading progress bar animation */
+      .reading-progress {
+        transition: width 0.1s ease;
+      }
+    </style>
+  </body>
 </html>
