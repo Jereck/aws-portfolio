@@ -68,7 +68,7 @@ Go to **IAM > Policies > Create policy**, and use this JSON:
 
 3. Download the access key/secret (for local dev or GitHub Actions)
 
-#### 🔄 IAM in DevOps Workflows
+### 🔄 IAM in DevOps Workflows
 In a CI/CD setup (like GitHub Actions), you'd use a role + OpenID Connect instead of an IAM user with static credentials. This:
 
 - Improves security
@@ -77,7 +77,7 @@ In a CI/CD setup (like GitHub Actions), you'd use a role + OpenID Connect instea
 
 - Makes your pipelines cloud-native and safe
 
-#### 📌 Takeaways
+### 📌 Takeaways
 - Never treat IAM as an afterthought — it's foundational.
 
 - Use least privilege: only grant access that’s absolutely necessary.
