@@ -2,7 +2,7 @@
 
 This is my personal portfolio website, showcasing my projects, experience, and skills in software engineering and cloud DevOps. The website is built with **HTML, CSS, and JavaScript** and deployed using **AWS services** for a scalable and serverless architecture.  
 
-![Portfolio Screenshot](insert_screenshot_url_here)  
+![Architecture Diagram](./architecture.png)
 
 ## 🚀 Features  
 - **Static Hosting:** Deployed via an **S3 bucket** with **CloudFront** for global content delivery.  
